@@ -1,0 +1,22 @@
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - app-tier
+  node:
+    image: bitnami/node
+    command: "sh -c 'npm install && npm start'"
+    volumes:
+      - .:/app
+    networks:
+      - app-tier
+    ports:
+      - "3000:3000"
